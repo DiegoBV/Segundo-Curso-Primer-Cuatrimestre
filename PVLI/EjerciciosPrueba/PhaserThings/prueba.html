@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Prueba Phaser</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="phaser.min.js"></script>
+	<script>
+		//variable del juego
+		var game = new Phaser.Game(768,384,Phaser.AUTO, '', {preload: preload, create: create, update: update, render: render});
+
+		//Preload
+		function preload(){
+			game.load.image('muro','assets/muro.png');
+			game.load.image('hand','assets/hand.png');
+			game.load.image('personaje','assets/personaje.png');
+			game.load.image('tierra','assets/tierra.jpg');
+		}
+
+		//Variables iniciales
+		//1.Jugador
+		var jugador; //personaje principal
+		var contadorSaltos = 0; //hacer doble salto
+
+		//2.Plataformas
+		var plataformas;
+		//3.Teclado
+		var cursores; //controlar eventos de teclado
+		//4.Enemigos
+		var manos; //numero de enemigos
+		var arrManos = []; //array de manos para consultar cosas
+
+		//Create
+		function create(){
+			//Fisica arcade
+			game.physics.startSystem(Phaser.Physics.ARCADE);
+
+			//Fondo
+			game.add.sprite(0,0,'muro');
+
+			//limites del juego
+			game.world.setBounds(0,0,2000,384);
+
+			//Grupo de plataformas
+			plataformas = game.add.group();
+			plataformas.enableBody = true;
+			var piso = plataformas.create(50, game.world.height - 100, 'tierra');
+			piso.scale.setTo(1,1);
+			piso.body.immovable = true;
+
+			//jugador
+			jugador = game.add.sprite(32, game.world.height - 350, 'personaje');
+			game.physics.arcade.enable(jugador);
+			jugador.body.bounce.y = 0;
+			jugador.body.gravity.y = 500;
+			jugador.body.collideWorldBounds = false;
+
+			//enemigos
+			manos = game.add.group();
+			manos.enableBody = true;
+
+			for(var i = 0; i < 2; i++){
+				var mano = manos.create(300+i*70,0,'hand');
+				mano.body.gravity.y = 300;
+				mano.body.bounce.y = 0.7 + Math.random()*0.2;
+
+				var estrella = {
+					"mano": mano,
+					"gravity_y": 300
+				};
+				arrManos.push(estrella);
+			}
+
+			cursores = game.input.keyboard.createCursorKeys();
+			juego.input.keyboard.onUpCallback = function(e){
+				if(e.KeyCode == Phaser.Keyboard.UP){
+					contadorSaltos++;
+				}
+			};
+
+			sprite.cameraOffset.x = 10;
+			sprite.cameraOffset.y = 10;
+			game.camera.follow(jugador);
+		}
+
+		function update(){
+			jugador.body.velocity.x = 0;
+			game.physics.arcade.collide(jugador,plataformas);
+			game.physics.arcade.collide(manos, plataformas);
+
+			if(cursores.left.isDown){
+				jugador.body.velocity.x = -150;
+
+			}
+			else if(cursores.right.isDown){
+				jugador.body.velocity.x = 150;
+			}
+
+			if(jugador.body.touching.down){
+				contadorSaltos = 0;
+			}
+			game.physics.arcade.overlap(jugador,manos, collectmano, null, this);
+		}
+
+		//render
+		function render(){
+			
+		}
+
+		function collectmano(jugador, mano){
+			if((jugador.position.y + jugador.height) <= mano.position.y){
+				mano.kill();
+				arrManos[0].mano.body.bounce.y = 0;
+			}
+		}
+	</script>
+</head>
+<body>
+
+</body>
+</html>

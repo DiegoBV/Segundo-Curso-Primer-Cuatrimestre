@@ -1,0 +1,6 @@
+﻿  Source.cpp
+c:\users\usuario\desktop\2ºvideojuegos\eda\problema_del_viajante\problema_del_viajante\source.cpp(17): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\eda\problema_del_viajante\problema_del_viajante\source.cpp(54): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\eda\problema_del_viajante\problema_del_viajante\source.cpp(55): warning C4018: '<': signed/unsigned mismatch
+  Problema_Del_Viajante.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\EDA\Problema_Del_Viajante\Debug\Problema_Del_Viajante.exe
+  Problema_Del_Viajante.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\EDA\Problema_Del_Viajante\Debug\Problema_Del_Viajante.pdb (Partial PDB)

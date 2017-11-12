@@ -1,0 +1,7 @@
+﻿  Source.cpp
+c:\users\usuario\desktop\2ºvideojuegos\eda\ciclos_hamiltonianos\ciclos_hamiltonianos\source.cpp(29): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\eda\ciclos_hamiltonianos\ciclos_hamiltonianos\source.cpp(39): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
+c:\users\usuario\desktop\2ºvideojuegos\eda\ciclos_hamiltonianos\ciclos_hamiltonianos\source.cpp(67): error C2955: 'std::vector': use of class template requires template argument list
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: see declaration of 'std::vector'
+c:\users\usuario\desktop\2ºvideojuegos\eda\ciclos_hamiltonianos\ciclos_hamiltonianos\source.cpp(67): error C2514: 'std::vector': class has no constructors
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: see declaration of 'std::vector'

@@ -1,0 +1,8 @@
+﻿  Source.cpp
+c:\users\usuario\desktop\elemento_mayoritario\elemento_mayoritario\source.cpp(14): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\elemento_mayoritario\elemento_mayoritario\source.cpp(40): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\elemento_mayoritario\elemento_mayoritario\source.cpp(47): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\elemento_mayoritario\elemento_mayoritario\source.cpp(57): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\elemento_mayoritario\elemento_mayoritario\source.cpp(58): warning C4018: '>': signed/unsigned mismatch
+  Elemento_Mayoritario.vcxproj -> C:\Users\Usuario\Desktop\Elemento_Mayoritario\Debug\Elemento_Mayoritario.exe
+  Elemento_Mayoritario.vcxproj -> C:\Users\Usuario\Desktop\Elemento_Mayoritario\Debug\Elemento_Mayoritario.pdb (Partial PDB)
