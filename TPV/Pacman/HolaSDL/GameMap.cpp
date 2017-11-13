@@ -1,88 +1,100 @@
 #include "GameMap.h"
 #include "Game.h"
 
-
-GameMap::GameMap(/*int fils, int colum, Texture* vit, Texture* m, Texture* com*/)
-{
-	rows = 200;
-	cols = 200;
-	/*
-	tablero = new MapCell*[rows];
-	for (int i = 0; i < rows; i++) {
-		tablero[i] = new MapCell[cols];
-	}*/
+/* Esto es una cosa opcional, luego vemos si lo metemos o no xD
+class GameMap(){
+	friend class Game; La clase Game puede acceder a los atributos privados de GameMap
 }
+*/
 
-
-GameMap::~GameMap()
-{
-	for (int i = 0; i < rows; i++) {
-		delete[] tablero[i];
-	}
-	delete[] tablero;
+GameMap::GameMap() //Crea un tablero con un array dinámico
+{	
 }
-
-void GameMap::crea_Mapa(Texture* vit, Texture* m, Texture* com, MapCell** tab) {
+GameMap::GameMap(int fils, int cols, Texture* vit, Texture* m, Texture* com, Game* gam) { //Constructora con parámetros
 	vitamina = vit;
 	muro = m;
 	comida = com;
-	tablero = new MapCell*[rows];
-	for (int i = 0; i < rows; i++) {  //lo tiene q hacer el constructor pero aun no tengo ni zorraaaa
-		tablero[i] = new MapCell[cols];
-	}
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			tablero[i][j] = tab[i][j];
+	game = gam;
+	if (fils != 0 && cols != 0) {
+		this->fils = fils;
+		this->cols = cols;
+
+		//Creación de la matriz
+		tablero2 = new MapCell*[fils]; //Es una matriz de punteros, para referenciar las casillas
+		for (int r = 0; r < fils; r++) {
+			tablero2[r] = new MapCell[cols]; //Ahora sí son arrays dinámicos completos
 		}
 	}
-}
-string GameMap::consulta_Posicion(int x, int y) {
-	string pos;
-	switch (tablero[x][y]) {
-	case Empty:
-		pos = "Empty";
-		break;
-	case Wall:
-		pos = "Wall";
-		break;
-	case Food:
-		pos = "Food";
-		break;
-	case Vitamins:
-		pos = "Vitamins";
-		break;
-	default:
-		pos = "Error";
-		break;	
+	else {
+		tablero2 = nullptr;
 	}
+}
+/*
+//////////
+Alternativa
+//////////
 
-	return pos;
+En vez de hacer un array de punteros a arrays dinámicos, se hace todo en un mismo array dinámico
+MapCell* celdas; //Esto en el .h
+
+Contructora:
+GameMap(int fils, int cols){
+	celdas = new MapCell[fils*cols];
+}
+
+Destructora:
+~GameMap(){
+	delete[] celdas;
+}
+
+Acceso:
+MapCell getCell(int fila, int columna){
+	return celdas [fils*cols + columna]; //Esto no lo entiendo muy bien xD Habría que revisarlo
+}
+
+*/
+
+GameMap::~GameMap() 
+{
+}
+
+void GameMap::destruir_Mapa() { //Destructora del tablero de juego con un array dinámico, la destructora por defecto se llama al hacer un nuevo map
+	if (tablero2 != nullptr) {
+	for (int r = 0; r < fils; r++) {
+	delete[] tablero2[r];
+	}
+	delete[] tablero2;
+	}
+}
+
+MapCell GameMap::getCell(int fils, int cols) {
+	return tablero2[fils][cols];
 }
 
 void GameMap::modifica_Posicion(int x, int y, MapCell nuevoObjeto) {
-	tablero[x][y] = nuevoObjeto;
+	tablero2[x][y] = nuevoObjeto;
 }
 
-void GameMap::render_Mapa(SDL_Renderer* &rnd) {
-	for (int i = 0; i < rows; i++) {
+void GameMap::render_Mapa() {
+	for (int i = 0; i < fils; i++) {
 		for (int j = 0; j < cols; j++) {
 			SDL_Rect des;
-			des.x = i;
-			des.y = j;
-			des.w = 30; //pruebas, deberia coger la anchura del game
-			des.h = 30;
-			switch (tablero[i][j]) {
+			des.x = j * game->dame_Anchura() / fils;
+			des.y = i * game->dame_Altura() / cols;
+			des.w = game->dame_Anchura() / fils;
+			des.h = game->dame_Altura() / cols;
+			switch (tablero2[i][j]) {  //comprueba lo que hay en la posicion i,j y manda a la textura correspondiente pintarse
 			case Empty:
 				//algo
 				break;
 			case Wall:
-				muro->RenderFrame(rnd, des);
+				muro->RenderFrame(game->dame_Renderer(), des);
 				break;
 			case Food:
-				comida->RenderFrame(rnd, des);
+				comida->RenderFrame(game->dame_Renderer(), des);
 				break;
 			case Vitamins:
-				vitamina->RenderFrame(rnd, des);
+				vitamina->RenderFrame(game->dame_Renderer(), des);
 				break;
 			}
 		}

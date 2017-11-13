@@ -1,26 +1,28 @@
 #pragma once
 #include "Texture.h"
 #include "SDL.h"
-enum MapCell { Empty, Wall, Food, Vitamins };
 
+using namespace std;
+enum MapCell { Empty, Wall, Food, Vitamins };
+class Game;
 class GameMap
 {
 private:
-	MapCell** tablero;
+	int fils;
+	int cols;
+	MapCell** tablero2; //Matriz dinámica para el tablero
 	Texture* vitamina;
 	Texture* muro;
 	Texture* comida;
-	int rows;
-	int cols;
-	//Game* game;
-public:
-	GameMap(/*int rows, int cols, Texture* vit, Texture* m, Texture* com*/);
-	~GameMap();
-	void crea_Mapa(Texture* vit, Texture* m, Texture* com, MapCell** tab);
-	string consulta_Posicion(int x, int y);
-	void modifica_Posicion(int x, int y, MapCell nuevoObjeto);
-	void render_Mapa(SDL_Renderer* &rnd);
-	void destruir_Mapa();
+	Game* game;
 
+public:
+	GameMap();
+	~GameMap();
+	GameMap(int fils, int cols, Texture* vit, Texture* m, Texture* com, Game* gam);//constructora con parámetros
+	MapCell getCell(int fils, int cols); //devuelve una celda
+	void modifica_Posicion(int x, int y, MapCell nuevoObjeto);
+	void render_Mapa();
+	void destruir_Mapa();
 };
 

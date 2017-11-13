@@ -6,8 +6,8 @@ Game::Game()
 {
 	window = nullptr;
 	renderer = nullptr;
-	const int winWidth = 800;
-	const int winHeight = 600;
+	winWidth = 870;
+	winHeight = 644;
 	int winX, winY;
 	winX = winY = SDL_WINDOWPOS_CENTERED;
 
@@ -17,33 +17,168 @@ Game::Game()
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	//Texturas
-	muro.CreaTexturaIMG(renderer, "..\\images\\wall.png", 1, 1);
-	com.CreaTexturaIMG(renderer, "..\\images\\comida.png", 1, 1);
-	vitam.CreaTexturaIMG(renderer, "..\\images\\vitamina.png", 1, 1);
-
-	tab = new MapCell*[200];
-	for (int i = 0; i < 200; i++) { //Pruebas, toda esta mierda ya la hace gameMap
-									//pero falta la carga de archivo						
-		tab[i] = new MapCell[200];
-	}
-	for (int i = 0; i < 200; i++) {
-		for (int j = 0; j < 200; j++) { //mapa cargado de archivo teoricamente
-			tab[i][j] = Empty;
-		}
-	}                         
-	tab[9][9] = Wall;
-	tab[199][199] = Food;
-	tab[60][60] = Vitamins;
-	map.crea_Mapa(&vitam, &muro, &com, tab);
-	//map = GameMap(200, 200, &vitam, &muro, &com, tab);
+	muro.CreaTexturaIMG(renderer, "..\\images\\wall.png", 1, 1, 0 , 0);
+	com.CreaTexturaIMG(renderer, "..\\images\\comida.png", 1, 1, 0 , 0);
+	vitam.CreaTexturaIMG(renderer, "..\\images\\vitamina.png", 1, 1, 0 , 0);
+	textGeneral.CreaTexturaIMG(renderer, "..\\images\\characters1.png", 4, 14, 0, 0); //carga las texturas de todos los personajes
+	textGhost = &textGeneral; //Dirección de la textGeneral cargada
+	
 }
 
 
-Game::~Game()
-{
+Game::~Game() //destruye el renderer y la ventana
+{	
+	//Finalization
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+}
+
+void Game::carga_Archivo(string name){
+	int fils, cols;
+
+	archivo.open(name);
+
+	if (archivo.is_open()){
+		archivo >> fils >> cols;
+		this->filasTablero = fils;
+		this->colsTablero = cols;
+		map = GameMap(fils, cols, &vitam, &muro, &com, this);
+		for (int i = 0; i < fils; i++){
+			for (int j = 0; j < cols; j++){
+				int pos;
+				archivo >> pos;
+				switch (pos) {
+				case 0:
+					map.modifica_Posicion(i, j, Empty);
+					break;
+				case 1:
+					map.modifica_Posicion(i, j, Wall);
+					break;
+				case 2:
+					map.modifica_Posicion(i, j, Food);
+					setComida(1);
+					break;
+				case 3:
+					map.modifica_Posicion(i, j, Vitamins);
+					setComida(1);
+					break;
+				case 4:
+					//pacman = Pacman(i, j, textGhost, this);
+					break;
+				case 5:
+					fantasmas[0] = Ghost(renderer, "..\\images\\characters1.png", i, j, pos, textGhost, this); //todo lo del new no es necesario, trabajariamos con mem dinamica																									
+					break;
+				case 6:
+					fantasmas[1] = Ghost(renderer, "..\\images\\characters1.png", i, j, pos, textGhost, this); //basta con tener un array estatico de fantasmas o , como mucho, un array dinamico
+					break;
+				case 7:
+					fantasmas[2] = Ghost(renderer, "..\\images\\characters1.png", i, j, pos, textGhost, this); //el this se refiere a "Game"
+					break;
+				case 8:
+					fantasmas[3] = Ghost(renderer, "..\\images\\characters1.png", i, j, pos, textGhost, this);
+					break;
+				case 9: {
+					map.modifica_Posicion(i, j, Empty);
+					pacman = Pacman(i, j, textGhost, this);
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+		archivo.close();
+	}
 }
 
 void Game::pinta_Mapa() {
-	map.render_Mapa(renderer);
+	map.render_Mapa();
+}
+
+bool Game::comprueba_Muro(int X, int Y) {
+	MapCell casilla = map.getCell(X, Y);
+	if (casilla == Wall) {
+		return true;
+	}
+	else
+		return false;
+}
+void Game::setComida(int a) {
+	numComida += a;
+}
+void Game::come(int x, int y) {
+	map.modifica_Posicion(x, y, Empty);
+	setComida(-1);
+}
+
+MapCell Game::consulta(int x, int y) {
+	return map.getCell(x, y);
+}
+
+bool Game::win() { //comprueba si se ha comido todo e.e
+	return (numComida == 0);
+}
+
+void Game::handle_Events() {
+	SDL_PollEvent(&event);
+	if (event.type == SDL_QUIT) {
+		exit = true;
+	}
+	else {
+		if (event.type == SDL_KEYDOWN) {
+			if (event.key.keysym.sym == SDLK_RIGHT) {
+				pacman.siguiente_Dir(1, 0);  //si es derecha le pasa la direccion derecha(1,0) y así con todas las direcciones
+			}
+			else if (event.key.keysym.sym == SDLK_UP) {
+				pacman.siguiente_Dir(0, -1);
+			}
+			else if (event.key.keysym.sym == SDLK_DOWN) {
+				pacman.siguiente_Dir(0, 1);
+			}
+			else if (event.key.keysym.sym == SDLK_LEFT) {
+				pacman.siguiente_Dir(-1, 0);
+			}
+		}
+	}
+}
+
+void Game::run() {
+	SDL_Delay(100);
+	SDL_RenderClear(renderer);
+	for (int i = 0; i < 4; i++) {
+		fantasmas[i].render(renderer);
+		//fantasmas[i].update();
+	}
+	handle_Events();
+	pacman.update();
+	pinta_Mapa();
 	SDL_RenderPresent(renderer);
+}
+
+//los gets de altura, anchura, renderer...
+int Game::dame_Altura() {
+	return this->winHeight;
+}
+
+int Game::dame_Anchura() {
+	return this->winWidth;
+}
+
+int Game::dame_FilasTablero() {
+	return this->filasTablero;
+}
+
+int Game::dame_ColumnasTablero() {
+	return this->colsTablero;
+}
+
+bool Game::dame_exit() {
+	return this->exit;
+}
+SDL_Renderer* Game::dame_Renderer() {
+	return this->renderer;
+}
+
+void Game::destruir() { //llamaría a todos los destructores, por ahora solo hay uno
+	map.destruir_Mapa();
 }
