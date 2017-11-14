@@ -1,0 +1,9 @@
+﻿  Source.cpp
+c:\users\usuario\desktop\problema_mochila\problema_mochila\source.cpp(17): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\problema_mochila\problema_mochila\source.cpp(43): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\usuario\desktop\problema_mochila\problema_mochila\source.cpp(49): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+c:\users\usuario\desktop\problema_mochila\problema_mochila\source.cpp(55): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\problema_mochila\problema_mochila\source.cpp(74): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\problema_mochila\problema_mochila\source.cpp(75): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Problema_Mochila.vcxproj -> C:\Users\Usuario\Desktop\Problema_Mochila\Debug\Problema_Mochila.exe
+  Problema_Mochila.vcxproj -> C:\Users\Usuario\Desktop\Problema_Mochila\Debug\Problema_Mochila.pdb (Partial PDB)
