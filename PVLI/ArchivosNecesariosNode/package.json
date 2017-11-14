@@ -1,0 +1,20 @@
+{
+  "version": "0.0.0",
+  "name": "awesome-game",
+  "author": "someone",
+  "license": "MIT",
+  "repository": "someone/Nueva carpeta",
+  "dependencies": {
+    "browserify": "*",
+    "browser-sync": "*",
+    "del": "*",
+    "gulp": "*",
+    "gulp-connect": "*",
+    "gulp-gh-pages": "*",
+    "gulp-util": "*",
+    "merge-stream": "*",
+    "phaser": "*",
+    "vinyl-source-stream": "*",
+    "watchify": "*"
+  }
+}
