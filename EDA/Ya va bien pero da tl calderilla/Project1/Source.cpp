@@ -5,23 +5,23 @@ using namespace std;
 
 
 const vector <int> valor = { 1, 2, 5, 10, 20, 50, 100, 200 };
-int cant_Max = 0;
+int cant_Max = -1;
 
-bool es_solucion(const int precio, const int suma) {
+bool es_solucion(const int &precio, const int &suma) {
 	return (suma == precio);
 }
 
-bool es_completable(const int precio, const vector <int> &sol, const int k, const int suma) {
+bool es_completable(const int &precio, const vector <int> &sol, const int &k, const int &suma) {
 	return (k < sol.size() && suma < precio);
 }
 
-void procesaSolucion(int cantidad) {
+void procesaSolucion(const int &cantidad) {
 	if (cantidad > cant_Max) {
 		cant_Max = cantidad;
 	}
 }
 
-bool es_Prometedora(const int precio, const int suma, const int cantidad, const int k) {
+bool es_Prometedora(const int &precio, const int &suma, const int &cantidad, const int &k) {
 	int cantRestante = precio - suma;
 	int pos = 0;
 	if (k + 1 == valor.size()) {
@@ -39,7 +39,7 @@ bool es_Prometedora(const int precio, const int suma, const int cantidad, const 
 }
 
 
-void quita_calderilla(const vector <int> &v, vector <int> &sol, int k, const int precio, int suma, int cantidad) {
+void quita_calderilla(const vector <int> &v, vector <int> &sol, int k, const int &precio, int suma, int cantidad) {
 	int i = 0;
 	bool cont = true;
 		while (k < v.size() && i <= v[k] && cont)
@@ -88,7 +88,7 @@ int main() {
 		cin >> precio;
 		rellena_Vector(calderilla);
 		quita_calderilla(calderilla,sol, 0, precio, 0, 0);
-		if (cant_Max == 0) {
+		if (cant_Max == -1) {
 			cout << "IMPOSIBLE" << endl;
 		}
 		else {
