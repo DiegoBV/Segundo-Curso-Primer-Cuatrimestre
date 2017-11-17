@@ -1,0 +1,10 @@
+﻿  Pila_Nodos.cpp
+  Main.cpp
+c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(25): error C2143: syntax error: missing ',' before '&'
+  c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(32): note: see reference to class template instantiation 'Pila_Nodos<T>' being compiled
+c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(26): error C2143: syntax error: missing ',' before '&'
+c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(69): error C2988: unrecognizable template declaration/definition
+c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(69): error C2143: syntax error: missing ',' before '&'
+c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(86): error C2988: unrecognizable template declaration/definition
+c:\users\usuario\desktop\pilanodos\pilanodos\pila_nodos.h(86): error C2143: syntax error: missing ',' before '&'
+  Generating Code...
