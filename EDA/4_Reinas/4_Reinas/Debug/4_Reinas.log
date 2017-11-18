@@ -1,6 +1,0 @@
-﻿  Source.cpp
-c:\users\usuario\desktop\2ºvideojuegos\eda\4_reinas\4_reinas\source.cpp(77): warning C4018: '<': signed/unsigned mismatch
-c:\users\usuario\desktop\2ºvideojuegos\eda\4_reinas\4_reinas\source.cpp(91): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
-c:\users\usuario\desktop\2ºvideojuegos\eda\4_reinas\4_reinas\source.cpp(36): warning C4715: 'Cuatro_Reinas': not all control paths return a value
-  4_Reinas.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\EDA\4_Reinas\Debug\4_Reinas.exe
-  4_Reinas.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\EDA\4_Reinas\Debug\4_Reinas.pdb (Partial PDB)
