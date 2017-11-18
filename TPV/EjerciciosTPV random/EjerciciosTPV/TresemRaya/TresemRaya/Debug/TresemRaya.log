@@ -1,5 +1,0 @@
-﻿  Source.cpp
-c:\users\usuario\desktop\tresemraya\tresemraya\source.cpp(168): warning C4715: 'jugadorX': not all control paths return a value
-c:\users\usuario\desktop\tresemraya\tresemraya\source.cpp(194): warning C4715: 'jugadorO': not all control paths return a value
-  TresemRaya.vcxproj -> C:\Users\Usuario\Desktop\TresemRaya\Debug\TresemRaya.exe
-  TresemRaya.vcxproj -> C:\Users\Usuario\Desktop\TresemRaya\Debug\TresemRaya.pdb (Partial PDB)
