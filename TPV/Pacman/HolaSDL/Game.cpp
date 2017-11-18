@@ -57,10 +57,6 @@ void Game::carga_Archivo(string name){
 		archivo >> fils >> cols;
 		this->filasTablero = fils;
 		this->colsTablero = cols;
-		if (map != nullptr) { //en caso de cargar una partida guardada...
-			delete map;
-		}
-		
 		map = new GameMap(fils, cols, texts[0], texts[1], texts[2], this);
 		for (int i = 0; i < fils; i++){
 			for (int j = 0; j < cols; j++){
@@ -76,10 +72,7 @@ void Game::carga_Archivo(string name){
 					map->modifica_Posicion(i, j, Empty);
 					pacman = Pacman(i, j, texts[3], this);
 				}
-				else if (pos == 4) {
-					map->modifica_Posicion(i, j, Empty);
-				}
-				else{
+				else if (pos != 4) {
 					fantasmas[pos - 5] = Ghost(renderer, "..\\images\\characters1.png", i, j, pos, texts[3], this);
 					map->modifica_Posicion(i, j, Empty);
 				}
@@ -93,20 +86,32 @@ void Game::pinta_Mapa() {
 	map->render_Mapa();
 }
 
-bool Game::comprueba_Muro(int X, int Y) {
-	MapCell casilla = map->getCell(X, Y);
-	if (casilla == Wall) {
+bool Game::siguiente_casilla (int &X, int &Y, int dirX, int dirY) {
+	//Primero calculamos la casilla siguiente
+	int tempX = X + dirX;
+	int tempY = Y + dirY;
+
+	//Comprueba el tipo de casilla que es
+	MapCell casilla = map->getCell(tempY, tempX);
+
+	//Miramos si puede mover
+	if (casilla != Wall) {
+		X += dirX;
+		Y += dirY;
 		return true;
 	}
 	else
 		return false;
 }
+
 void Game::setComida(int a) {
 	numComida += a;
 }
+
 void Game::come(int x, int y) { //modifica la posicion a empty y reduce el numero de comida en 1
 	if (map->getCell(x, y) == Vitamins){
-		muerteFantasma = true;
+		vitaminas = true;
+		vitaminasTiempo = 30;
 	}
 	map->modifica_Posicion(x, y, Empty);
 	setComida(-1);
@@ -153,26 +158,31 @@ void Game::handle_Events() {
 void Game::run() {
 	while (!this->win() && !this->dame_exit()) {
 		delay();
+		tiempo_Vitamina(); //tiempo que los fantasmas están asustados
 		SDL_RenderClear(renderer); //limpia el render
-		handle_Events(); //controla los eventos de teclado
-		muerteFantasma = false;
-		animaciones_Extra();
+		comprueba_colisiones(pacman.posX, pacman.posY); //comprueba que los fantasmas y pacman se han o no chocado
+		update_Fantasmas(); //update de los 4 fantasmas
 		pacman.update(); //update del pacman
-		for (int i = 0; i < 4; i++) {
-			fantasmas[i].update(muerteFantasma);
-			fantasmas[i].render(renderer);
-		}
+		animaciones_Extra(); //anima las vitaminas
+		handle_Events(); //controla los eventos de teclado
 		pinta_Mapa();   //pinta el tablero
 		SDL_RenderPresent(renderer); //plasma el renderer en pantalla
 	}
 }
 
-bool Game::comprueba_personajes(int x, int y){
+bool Game::comprueba_colisiones(int x, int y){
 	for (int i = 0; i < 4; i++){
-		if (fantasmas[i].posActX == x && fantasmas[i].posActY == y)
-			return true;
+		if (fantasmas[i].posActX == y && fantasmas[i].posActY == x){
+			if (vitaminas){
+				fantasmas[i].muerte();
+			}
+			else{
+				exit = true;
+			}
+		}
 	}
-	return false;
+
+	return exit;
 }
 
 //los gets de altura, anchura, renderer...
@@ -219,8 +229,41 @@ int Game::obtenerPixelY(int posicion){
 	return (winHeight / filasTablero) * posicion;
 }
 
+void Game::tiempo_Vitamina() { //temporizador vitaminas
+	if (vitaminasTiempo > 0)
+		vitaminasTiempo--;
+	else
+		vitaminas = false;
+}
+
+void Game::update_Fantasmas() { //update de todos los fantsasmas
+	for (int i = 0; i < 4; i++) {
+		fantasmas[i].update(vitaminas);
+	}
+}
+
+void Game::menu() { //menu simple desde consola
+	string eleccion;
+	do {
+		cout << "PACMAN!!!" << endl << "Cargar partida[c] o Nueva Partida[n]";
+		cin >> eleccion;
+
+		if (eleccion == "c") {
+			this->carga_Archivo("..\\partidaGuardada.txt"); //no se controla que no exista el archivo
+		}
+		
+	} while (eleccion != "c" && eleccion != "n");
+
+	if (eleccion == "n") {
+		cout << "Elige nivel [1 - 5]" << endl;
+		cin >> eleccion;
+		this->carga_Archivo("..\\level0" + eleccion + ".dat");
+	}
+
+}
+
 void Game::guarda_Partida() {
-	bool prueba = false; //para no sobreescribir
+	bool noEscribir = false; //para no sobreescribir
 	partidaGuardada.open("..\\partidaGuardada.txt");
 	if (partidaGuardada.is_open()) {
 		partidaGuardada << this->dame_FilasTablero() << " " << this->dame_ColumnasTablero();
@@ -228,39 +271,23 @@ void Game::guarda_Partida() {
 
 		for (int i = 0; i < this->dame_FilasTablero(); i++) {
 			for (int j = 0; j < this->dame_ColumnasTablero(); j++) {
-				for (int r = 0; r < 4; r++) { //esto se podria hacer mejor :P. Recorre todos los fantasmas buscando la posIniX y la posIniY y los coloca en el archivo
+				for (int r = 0; r < 4; r++) { //esto se podria hacer mejor. Recorre todos los fantasmas buscando la posIniX y la posIniY y los coloca en el archivo
 					if (fantasmas[r].posInX == i && fantasmas[r].posInY == j) {
 						partidaGuardada << r + 5 << " ";
-						prueba = true; //si se pone a true, no puede sobreescribir
+						noEscribir = true; //si se pone a true, no puede sobreescribir
 					}
 				}
 				if (pacman.dame_IniY() == i && pacman.dame_IniX() == j) { //coloca a Pacman en su posicion original
 					partidaGuardada << 9 << " ";
 				}
 				else {
-					if(!prueba)//si ningun fantasma se ha escrito, escribe la posicion adecuada
-					partidaGuardada << (int)this->consulta(i, j) << " ";
+					if (!noEscribir)//si ningun fantasma se ha escrito, escribe la posicion adecuada
+						partidaGuardada << (int)this->consulta(i, j) << " ";
 				}
-				prueba = false;
+				noEscribir = false;
 			}
 			partidaGuardada << endl;
 		}
 	}
 	partidaGuardada.close();
-}
-
-void Game::menu() {
-	string eleccion;
-	cout << "PACMAN!!!" << endl << "Cargar partida[c] o Nueva Partida[n]";
-	cin >> eleccion;
-
-	if (eleccion == "c") {
-		this->carga_Archivo("..\\partidaGuardada.txt"); //no se controla que no exista el archivo
-	}
-	else if (eleccion == "n") {
-		cout << "Elige nivel" << endl;
-		cin >> eleccion;
-		this->carga_Archivo("..\\level0" + eleccion + ".dat");
-	}
-
 }

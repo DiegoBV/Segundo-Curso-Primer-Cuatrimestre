@@ -40,14 +40,8 @@ Ghost::~Ghost()
 {
 }
 
-void Ghost::update(bool muerte) {
-	if (muerte){
-		this->muerte();
-	}
-	else {
-		posActX += actualDir.dirY;
-		posActY += actualDir.dirX;	
-	}
+void Ghost::update(bool vitamina) {
+	juego->siguiente_casilla(posActY, posActX, actualDir.dirX, actualDir.dirY);
 
 	donut();
 
@@ -55,12 +49,21 @@ void Ghost::update(bool muerte) {
 
 	rectDes.x = juego->obtenerPixelX(posActY);
 	rectDes.y = juego->obtenerPixelY(posActX);
-
+	
+	this->render(vitamina);
 }
 
-void Ghost::render(SDL_Renderer* &render) {
-	textura->ModificaRectangulo(0, (this->numFantasma - 4) * 2); //modifica el rectángulo origen para dibujar el sprite adecuado...
-	textura->Render(render, rectDes);
+void Ghost::render(bool vitamina) {
+	if (vitamina){
+		textura->ModificaRectangulo(0, 13);
+	}
+	else {
+		textura->ModificaRectangulo(0, (this->numFantasma - 4) * 2); //modifica el rectángulo origen para dibujar el sprite adecuado...
+	}
+
+	animar(vitamina);
+
+	textura->Render(juego->dame_Renderer(), rectDes);
 }
 
 void Ghost::muerte() {
@@ -72,32 +75,23 @@ void Ghost::muerte() {
 int Ghost::posibles_Dirs() {
 	int tempX;
 	int tempY;
-	int direccion = 0;
 	int backward = 0;
-	int prueba = 0;
-	bool muro = false;
-	bool borrar = false;
 	int posibles [4];
-	int j = 0; //COntrol del array de posibles
+	int j = 0; //Control del array de posibles
 
 	//Exploramos las posibilidades 
 	for (int i = 0; i < 4; i++) {
 		tempX = posActY;
 		tempY = posActX;
 
-		tempX += posiblesDirs[i].dirX;
-		tempY += posiblesDirs[i].dirY;
-
-		muro = juego->comprueba_Muro(tempY, tempX);
-
-		if (actualDir.dirX == 0 && actualDir.dirY == 0){ //Para que se pueda inicia
+		if (actualDir.dirX == 0 && actualDir.dirY == 0){ //Para que se pueda iniciar
 			posibles[j] = i;
 			j++;
 		}
 		else if ((posiblesDirs[i].dirX == (actualDir.dirX*-1)) && (posiblesDirs[i].dirY == (actualDir.dirY*-1))) { //Primero comprobamos que no es la dir contraria
 			backward = i;
 		}
-		else if (!muro) { //Comprobamos que no hay muro
+		else if (juego->siguiente_casilla(tempX, tempY, posiblesDirs[i].dirX, posiblesDirs[i].dirY)) { //Comprobamos que no hay muro
 			posibles[j] = i;
 			j++;
 		}
@@ -105,17 +99,14 @@ int Ghost::posibles_Dirs() {
 
 	//Elección de direccion
 	if (j > 1) { //Hay más de una posición posible: escogemos una random
-		prueba = (rand() % j);
-		direccion = posibles[rand() % j];
+		return posibles[rand() % j];
 	}
 	else if (j == 1) { //Sólo hay una posibilidad, estamos en un pasillo
-		direccion = posibles[0];
+		return posibles[0];
 	}
 	else { //No hay posibilidades, callejón sin salida, mueve atrás
-		direccion = backward;
+		return backward;
 	}
-
-	return direccion;
 }
 
 void Ghost::cambiaDir() {
@@ -141,5 +132,29 @@ void Ghost::donut() { //hace las comprobaciones para el movimiento toroidal
 	if (posActX > juego->dame_ColumnasTablero()) {
 		posActX = 0;
 	}
-	donutS = true;
+}
+
+void Ghost::animar(bool vitamina){
+	int filaSheet; //indica la fila donde animar (0, 1, 2, 3)
+
+	if (!vitamina){
+		if (this->actualDir.dirX == 1) {
+			filaSheet = 0;
+		}
+		else if (this->actualDir.dirX == -1) {
+			filaSheet = 2;
+		}
+		else if (this->actualDir.dirY == 1) {
+			filaSheet = 1;
+		}
+		else {
+			filaSheet = 3;
+		}
+		this->textura->Anima(100, filaSheet, (this->numFantasma - 4) * 2, 1, 2);
+	}
+	else
+	{
+		filaSheet = 0;
+		this->textura->Anima(100, filaSheet, 12, 1, 2);
+	}
 }

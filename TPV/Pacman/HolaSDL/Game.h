@@ -29,7 +29,9 @@ private:
 	int frameTime; // mediciones del tiempo para un Delay "eficiente"
 	int frameRate;
 	string path; //path de las texturas
-	bool muerteFantasma = false;
+	bool vitaminas = false;
+	int vitaminasTiempo = 0;
+
 public:
 	Game();
 	~Game();
@@ -37,7 +39,7 @@ public:
 	void pinta_Mapa();
 	void handle_Events(); //se encarga de manejar los eventos de teclado para controlar a Pacman
 	void run();
-	bool comprueba_Muro(int X, int Y);
+	bool siguiente_casilla(int &X, int &Y, int dirX, int dirY); //Le pasamos la casilla actual y calcula la siguiente
 	void come(int x, int y); //cambia casilla de vitamina o de comida a vacia
 	MapCell consulta(int x, int y); //devuelve el tipo de casilla que le indicas
 	void setComida(int a); //suma o resta comida, hecho para sumar o restar de 1 en 1
@@ -52,9 +54,11 @@ public:
 	void animaciones_Extra();
 	int obtenerPixelX(int casilla);
 	int obtenerPixelY(int casilla);
-	bool comprueba_personajes(int x, int y);
-	void guarda_Partida();
+	bool comprueba_colisiones(int x, int y);
+	void tiempo_Vitamina();
+	void update_Fantasmas();
 	void menu();
+	void guarda_Partida();
 };
 
  
