@@ -1,5 +1,0 @@
-﻿  Source.cpp
-c:\users\usuario\desktop\quicksort\quicksort\source.cpp(18): warning C4018: '<': signed/unsigned mismatch
-c:\users\usuario\desktop\quicksort\quicksort\source.cpp(25): warning C4018: '<': signed/unsigned mismatch
-  QuickSort.vcxproj -> C:\Users\Usuario\Desktop\QuickSort\Debug\QuickSort.exe
-  QuickSort.vcxproj -> C:\Users\Usuario\Desktop\QuickSort\Debug\QuickSort.pdb (Partial PDB)
