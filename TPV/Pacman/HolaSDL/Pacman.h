@@ -8,6 +8,7 @@ class Pacman
 	int posX, posY;
 	SDL_Rect rectDest;
 	int dirX, dirY, nX, nY;
+	int iniX, iniY;
 	
 public:
 	Pacman();
@@ -16,9 +17,13 @@ public:
 	bool siguiente_Dir(int dX, int dY);
 	void render();
 	void comer();
-	void elige_Direccion();
+	void donut();
+	void mueve_Pacman();
 	void modifica_Rectangulo();
+	void animar();
 	void update();
+	int dame_IniX();
+	int dame_IniY();
 
 };
 
