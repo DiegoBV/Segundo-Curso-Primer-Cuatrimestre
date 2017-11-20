@@ -1,7 +1,7 @@
 ﻿  Source.cpp
-c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(15): warning C4018: '<': signed/unsigned mismatch
-c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(45): warning C4018: '<': signed/unsigned mismatch
-c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(53): warning C4018: '<': signed/unsigned mismatch
-c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(68): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(11): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(40): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(48): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\eda\ya va bien pero da tl calderilla\project1\source.cpp(63): warning C4018: '<': signed/unsigned mismatch
   Project1.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\ClaseThings\ClaseThings\EDA\Ya va bien pero da tl calderilla\Debug\Project1.exe
   Project1.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\ClaseThings\ClaseThings\EDA\Ya va bien pero da tl calderilla\Debug\Project1.pdb (Partial PDB)

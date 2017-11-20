@@ -3,10 +3,6 @@
 #include <iostream>
 using namespace std;
 
-
-const vector <int> valor = { 1, 2, 5, 10, 20, 50, 100, 200 };
-int cant_Max = -1;
-
 bool es_solucion(const int &precio, const int &suma) {
 	return (suma == precio);
 }
@@ -15,13 +11,13 @@ bool es_completable(const int &precio, const vector <int> &sol, const int &k, co
 	return (k < sol.size() && suma < precio);
 }
 
-void procesaSolucion(const int &cantidad) {
+void procesaSolucion(const int &cantidad, int &cant_Max) {
 	if (cantidad > cant_Max) {
 		cant_Max = cantidad;
 	}
 }
 
-bool es_Prometedora(const int &precio, const int &suma, const int &cantidad, const int &k) {
+bool es_Prometedora(const int &precio, const int &suma, const int &cantidad, const int &k, const vector <int> &valor, const int cant_Max) {
 	int cantRestante = precio - suma;
 	int pos = 0;
 	if (k + 1 == valor.size()) {
@@ -38,18 +34,17 @@ bool es_Prometedora(const int &precio, const int &suma, const int &cantidad, con
 	}
 }
 
-
-void quita_calderilla(const vector <int> &v, vector <int> &sol, int k, const int &precio, int suma, int cantidad) {
+void quita_calderilla(const vector <int> &v, vector <int> &sol, int k, const int &precio, int suma, int cantidad, const vector <int> &valor,int &cant_Max) {
 	int i = 0;
 	bool cont = true;
 		while (k < v.size() && i <= v[k] && cont)
 		{
 			sol[k] = i;
 			if (es_solucion(precio, suma)) {
-				procesaSolucion(cantidad);
+				procesaSolucion(cantidad, cant_Max);
 			}
-			else if (es_completable(precio, sol, k, suma) && es_Prometedora(precio, suma, cantidad, k)) {
-				quita_calderilla(v, sol, k + 1, precio, suma, cantidad);
+			else if (es_completable(precio, sol, k, suma)&& es_Prometedora(precio, suma, cantidad, k, valor, cant_Max)) {
+				quita_calderilla(v, sol, k + 1, precio, suma, cantidad, valor, cant_Max);
 				if(k + 1 < v.size())
 				sol[k + 1] = 0;  //reinicia el elemento posterior
 			}
@@ -57,8 +52,8 @@ void quita_calderilla(const vector <int> &v, vector <int> &sol, int k, const int
 				cont = false;
 			}
 			i++;
-			cantidad++;
 			suma += valor[k];
+			cantidad++;
 		}
 	}
 
@@ -77,6 +72,8 @@ int main() {
 	int i = 0;
 	vector <int> calderilla;
 	calderilla.resize(8);
+	const vector <int> valor = { 1, 2, 5, 10, 20, 50, 100, 200 };
+	int cant_Max = -1;
 
 	//Function
 	cin >> n;
@@ -87,14 +84,14 @@ int main() {
 		int precio;
 		cin >> precio;
 		rellena_Vector(calderilla);
-		quita_calderilla(calderilla,sol, 0, precio, 0, 0);
+		quita_calderilla(calderilla,sol, 0, precio, 0, 0, valor, cant_Max);
 		if (cant_Max == -1) {
 			cout << "IMPOSIBLE" << endl;
 		}
 		else {
 			cout << cant_Max << endl;
 		}
-		cant_Max = 0;
+		cant_Max = -1;
 		i++;
 	}
 	return 0;
