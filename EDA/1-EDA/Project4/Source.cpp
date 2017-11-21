@@ -12,12 +12,6 @@ bool elemento_situado(const vector < int >& v, int ini, int fin){
 	//Function
 	if (n < 2){
 		return (n == 0) ? false : (v[ini] == ini);
-		/*return false;
-	else if (fin - ini == 1){
-		if (v[ini] == ini)
-			return true;
-		else
-			return false;*/
 	}
 	else if (v[med] == med) {
 		return true;
@@ -28,13 +22,6 @@ bool elemento_situado(const vector < int >& v, int ini, int fin){
 	else if (v[med] > med) {
 		elemento_situado(v, ini, med);
 	}
-	/*else if(elemento_situado(v, ini, med)){
-		return true;	
-	}
-	else if (elemento_situado(v, med, fin)) {     //esto es válido para vectores desordenados
-		return true;
-	}
-	else return false;*/
 }
 
 void rellenaVector(vector < int >& v) {
