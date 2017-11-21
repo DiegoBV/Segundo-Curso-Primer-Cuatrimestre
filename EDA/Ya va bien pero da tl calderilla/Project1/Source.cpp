@@ -33,27 +33,25 @@ bool es_Prometedora(const int &precio, const int &suma, const int &cantidad, con
 		return true;
 	}
 }
-
+//Coste = x1 * x2 * x3... * x8, siendo xn el numero de monedas en dicha posicion
 void quita_calderilla(const vector <int> &v, vector <int> &sol, int k, const int &precio, int suma, int cantidad, const vector <int> &valor,int &cant_Max) {
 	int i = 0;
 	bool cont = true;
 		while (k < v.size() && i <= v[k] && cont)
 		{
 			sol[k] = i;
-			if (es_solucion(precio, suma)) {
-				procesaSolucion(cantidad, cant_Max);
+			int sumaAux = suma + sol[k] * valor[k];
+			int cantAux = cantidad + sol[k];
+			if (es_solucion(precio, sumaAux)) {
+				procesaSolucion(cantAux, cant_Max);
 			}
-			else if (es_completable(precio, sol, k, suma)&& es_Prometedora(precio, suma, cantidad, k, valor, cant_Max)) {
-				quita_calderilla(v, sol, k + 1, precio, suma, cantidad, valor, cant_Max);
-				if(k + 1 < v.size())
-				sol[k + 1] = 0;  //reinicia el elemento posterior
+			else if (es_completable(precio, sol, k, sumaAux) && es_Prometedora(precio, sumaAux, cantAux, k, valor, cant_Max)) {
+				quita_calderilla(v, sol, k + 1, precio, sumaAux, cantAux, valor, cant_Max);
 			}
 			else {
 				cont = false;
 			}
 			i++;
-			suma += valor[k];
-			cantidad++;
 		}
 	}
 
