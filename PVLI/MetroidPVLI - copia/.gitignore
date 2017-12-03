@@ -1,0 +1,10 @@
+node_modules
+
+.tmp
+dist
+.publish
+gulp.config.json
+.jshintrc
+gulpfile.js
+package.json
+pachage-lock.json
