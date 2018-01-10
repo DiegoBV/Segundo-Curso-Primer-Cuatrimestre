@@ -1,0 +1,5 @@
+﻿  Game.cpp
+c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\clasethings-labsviernes\tpv\pacman\holasdl\game.cpp(34): warning C4018: '<': signed/unsigned mismatch
+c:\users\usuario\desktop\2ºvideojuegos\clasethings\clasethings\clasethings-labsviernes\tpv\pacman\holasdl\game.cpp(168): warning C4715: 'Game::colision_Fantasma': not all control paths return a value
+  HolaSDL.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\ClaseThings\ClaseThings\ClaseThings-LabsViernes\TPV\Pacman\bin\HolaSDLDebug.exe
+  HolaSDL.vcxproj -> C:\Users\Usuario\Desktop\2ºVideojuegos\ClaseThings\ClaseThings\ClaseThings-LabsViernes\TPV\Pacman\bin\HolaSDLDebug.pdb (Full PDB)
